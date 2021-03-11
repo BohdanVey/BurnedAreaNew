@@ -1,0 +1,127 @@
+config_save_path: ./experiments/segmentation/segmentation_config.yaml
+device: cuda:0
+epochs: 30
+experiment_dir: ./experiments/segmentation
+experiment_name: segmentation
+log_dir: ./experiments
+loss:
+  params: null
+  type: BCELoss
+metrics:
+  IoU:
+    params:
+      threshold: 0.5
+model:
+  best_checkpoint_path: ./experiments/segmentation/best_checkpoint.pt
+  last_checkpoint_path: ./experiments/segmentation/last_checkpoint.pt
+  params:
+    activation: sigmoid
+    classes: 1
+    encoder_name: resnet34
+    encoder_weights: imagenet
+    in_channels: 4
+  save: true
+  type: Unet
+optim:
+  params:
+    lr: 0.0001
+  type: Adam
+seed: 1
+stopper:
+  params:
+    patience: 12
+tb_dir: ./experiments/segmentation/tb
+train:
+  dataset:
+    params:
+      augmentations:
+        params:
+          height: 256
+          p: 1.0
+          width: 256
+        type: SmartCrop
+      csv_path: /datasets/rpartsey/satellite/planet/planet_dataset/train-val/random_split/train.csv
+      transforms:
+        image:
+          ChannelsFirst:
+            params: null
+          FromNumpy:
+            params: null
+          Normalize:
+            params:
+              mean:
+              - 4417.258621276464
+              - 3835.2537312971936
+              - 3065.427994856266
+              - 3783.5501700000373
+              std:
+              - 805.3352649209319
+              - 752.9507977334065
+              - 769.0657720493105
+              - 1136.0581964787941
+          ToNumpyInt32:
+            params: null
+          ToTorchFloat:
+            params: null
+        target:
+          ChannelsFirst:
+            params: null
+          FromNumpy:
+            params: null
+          ToTorchFloat:
+            params: null
+    type: PlanetSegmentationDataset
+  loader:
+    params:
+      batch_size: 8
+      num_workers: 2
+      sampler: null
+      shuffle: true
+    type: DataLoader
+val:
+  dataset:
+    params:
+      augmentations:
+        params:
+          height: 256
+          p: 1.0
+          width: 256
+        type: CenterCrop
+      csv_path: /datasets/rpartsey/satellite/planet/planet_dataset/train-val/random_split/val.csv
+      transforms:
+        image:
+          ChannelsFirst:
+            params: null
+          FromNumpy:
+            params: null
+          Normalize:
+            params:
+              mean:
+              - 4417.258621276464
+              - 3835.2537312971936
+              - 3065.427994856266
+              - 3783.5501700000373
+              std:
+              - 805.3352649209319
+              - 752.9507977334065
+              - 769.0657720493105
+              - 1136.0581964787941
+          ToNumpyInt32:
+            params: null
+          ToTorchFloat:
+            params: null
+        target:
+          ChannelsFirst:
+            params: null
+          FromNumpy:
+            params: null
+          ToTorchFloat:
+            params: null
+    type: PlanetSegmentationDataset
+  loader:
+    params:
+      batch_size: 1
+      num_workers: 2
+      sampler: null
+      shuffle: false
+    type: DataLoader
